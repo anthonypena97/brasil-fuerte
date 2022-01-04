@@ -6,6 +6,8 @@
 
 #### Live Site: https://anthonypena97.github.io/brasil-fuerte/
 
+https://play.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e&nd=1
+
 <p> ---------------------------------------- </p>
 
 Application written in Typescript, using [Three.Js](https://threejs.org/) for WebGl 3D Rendering.
