@@ -2,7 +2,7 @@
 ### 3D Object for Playlist Redirection
 ![MIT License badge](https://img.shields.io/badge/license-MIT_License-green)
 
-![brasil-fuerte-demo](https://user-images.githubusercontent.com/79285555/148020273-ac2ea3bb-9957-4b7d-80bf-0ab57d3f9603.gif)
+![brasil-fuerte-demo](https://anthonypena97.github.io/brasil-fuerte/)
 
 #### https://anthonypena97.github.io/brasil-fuerte/
 
