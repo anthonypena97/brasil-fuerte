@@ -10,7 +10,7 @@
 
 Application written in Typescript, using [Three.Js](https://threejs.org/) for WebGl 3D Rendering.
 
-THREE.interactive by [Marcus Lerner] is used for 3D Object interactivity.
+[THREE.interactive](https://github.com/markuslerner/THREE.Interactive) by [Marcus Lerner](https://github.com/markuslerner) is used for 3D Object interactivity.
 
 ## Description
 A simple site rendering a 3D Box which a user may click and be redirected to my Brasilian Top Hits Spotify Playlist.
@@ -53,5 +53,6 @@ For any inquiries or questions, please contact Anthony Pena via:
 ## Acknowledgments
 
 Inspiration, code snippets, etc.
+* [Geometry Cube Example](https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_cube.html)  by [mrdoob](https://github.com/mrdoob)
 * [Three.js Typescript Boilerplate](https://github.com/Sean-Bradley/Three.js-TypeScript-Boilerplate) by [Sean Bradley](https://github.com/Sean-Bradley)
 * [Mouse Hover Snippet by BFG](https://stackoverflow.com/questions/42950341/when-mouseover-hover-on-object-the-mouse-cursor-should-change-three-js/42951493#42951493)
