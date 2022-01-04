@@ -1,12 +1,19 @@
 import * as THREE from "three";
 import { InteractionManager } from "three.interactive";
 
-let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer;
+// ============================================ GLOBAL SCOPE DECLARATIONS ============================================
+
+let camera: THREE.PerspectiveCamera, scene: THREE.Scene, raycaster: THREE.Raycaster, renderer: THREE.WebGLRenderer;
 let mesh: THREE.Mesh;
 let planes = [];
 
-init();
-animate();
+let INTERSECTED: any;
+let theta = 0;
+
+const pointer = new THREE.Vector2();
+const radius = 100;
+
+
 
 function init() {
 
@@ -48,11 +55,24 @@ function init() {
 
     interactionManager.add(mesh);
 
-    mesh.addEventListener("click", (event) => {
-        console.log(event);
-        console.log('hello');
-        window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e", '_blank');
-    });
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+        mesh.addEventListener("click", (event) => {
+            console.log(event);
+            console.log('hello');
+            window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e", '_blank');
+        });
+
+    } else {
+
+        mesh.addEventListener("click", (event) => {
+            console.log(event);
+            console.log('desktop');
+            window.open("https://play.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e", '_blank');
+        });
+
+    }
+
 
 }
 
@@ -89,3 +109,8 @@ function onDocumentMouseMove(event) {
     }
 
 }
+
+// LOAD SCRIPTS
+
+init();
+animate();
