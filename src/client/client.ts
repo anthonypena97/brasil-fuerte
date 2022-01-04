@@ -3,10 +3,10 @@ import { InteractionManager } from "three.interactive";
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer;
 let mesh: THREE.Mesh;
+let planes = [];
 
 init();
 animate();
-
 
 function init() {
 
@@ -28,11 +28,13 @@ function init() {
 
     mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+    planes.push(mesh);;
 
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     const interactionManager = new InteractionManager(
         renderer,
@@ -70,3 +72,20 @@ function animate() {
     renderer.render(scene, camera);
 }
 
+function onDocumentMouseMove(event) {
+
+    let mouse = new THREE.Vector2();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    let raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera);
+    let intersects = raycaster.intersectObjects(planes);
+
+    if (intersects.length > 0) {
+        $('html,body').css('cursor', 'pointer');
+    } else {
+        $('html,body').css('cursor', 'default');
+    }
+
+}
