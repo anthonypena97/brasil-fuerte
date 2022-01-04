@@ -55,4 +55,4 @@ For any inquiries or questions, please contact Anthony Pena via:
 Inspiration, code snippets, etc.
 * [Geometry Cube Example](https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_cube.html)  by [mrdoob](https://github.com/mrdoob)
 * [Three.js Typescript Boilerplate](https://github.com/Sean-Bradley/Three.js-TypeScript-Boilerplate) by [Sean Bradley](https://github.com/Sean-Bradley)
-* [Mouse Hover Snippet by BFG](https://stackoverflow.com/questions/42950341/when-mouseover-hover-on-object-the-mouse-cursor-should-change-three-js/42951493#42951493)
+* [Mouse Hover Snippet](https://stackoverflow.com/questions/42950341/when-mouseover-hover-on-object-the-mouse-cursor-should-change-three-js/42951493#42951493)
