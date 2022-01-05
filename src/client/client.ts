@@ -6,12 +6,12 @@ import { InteractionManager } from "three.interactive";
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, raycaster: THREE.Raycaster, renderer: THREE.WebGLRenderer;
 let object: THREE.Mesh;
 let planes = [];
+let intersects;
 
 let INTERSECTED: any;
 let theta = 0;
 
-const pointer = new THREE.Vector2();
-const radius = 100;
+const pointer = new THREE.Vector2(50, 50);
 const isMobile = window.matchMedia("(max-width: 400px)");
 
 function init() {
@@ -61,16 +61,20 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    document.body.appendChild(renderer.domElement);
+    let canvas_dom = renderer.domElement
+    canvas_dom.addEventListener("touchstart", function (event) { event.preventDefault() })
+    canvas_dom.addEventListener("touchmove", function (event) { event.preventDefault() })
+    canvas_dom.addEventListener("touchend", function (event) { event.preventDefault() })
+    canvas_dom.addEventListener("touchcancel", function (event) { event.preventDefault() })
+
+    document.body.appendChild(canvas_dom);
 
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
-        // console.log('hellophone')
         document.addEventListener('touchmove', onDocumentMouseMove, false);
 
     } else {
 
-        console.log('desktop')
         document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     }
@@ -100,20 +104,16 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
-    // console.log('size');
-
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     if (isMobile.matches) {
 
-        // console.log('mobile-screen');
         camera.position.z = 600;
         document.removeEventListener('mousemove', onDocumentMouseMove, false);
         document.addEventListener('touchmove', onDocumentMouseMove, false);
 
     } else {
 
-        // console.log('desktop-screen');
         camera.position.z = 400;
         document.removeEventListener('touchmove', onDocumentMouseMove, false);
         document.addEventListener('mousemove', onDocumentMouseMove, false);
@@ -132,11 +132,13 @@ function onDocumentMouseMove(event) {
 
     } else {
 
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
         pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
     }
-
 
     let raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
@@ -164,13 +166,13 @@ function render() {
     // find intersections
     raycaster.setFromCamera(pointer, camera);
 
-    const intersects = raycaster.intersectObjects(scene.children);
+    intersects = raycaster.intersectObjects(scene.children, false);
 
     if (intersects.length > 0) {
 
         if (INTERSECTED != intersects[0].object) {
 
-            if (INTERSECTED) INTERSECTED.material.color.set(0x808080);
+            if (INTERSECTED) INTERSECTED.material.color.set(0xFFFFFF);
 
             INTERSECTED = intersects[0].object;
             INTERSECTED.material.color.set(0x808080);
