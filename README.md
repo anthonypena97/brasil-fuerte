@@ -32,6 +32,16 @@ A simple site rendering a 3D Box which a user may click and be redirected to my 
 
 No Installation necessary, simply visit [Brasil Fuerte](https://anthonypena97.github.io/brasil-fuerte/)
 
+To use code for yourself :
+
+- download or clone application
+- open terminal in application root directory
+- enter,`npm i`
+- enter, `npm run dev` for development
+- enter, `npm run build` once complete
+- copy new bundle.js, index.html, and any public assets from dist/client/ folder
+- use copied files for deployment
+
 ## License
 
 MIT License
