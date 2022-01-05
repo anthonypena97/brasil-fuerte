@@ -9,7 +9,6 @@ let planes = [];
 let intersects;
 
 let INTERSECTED: any;
-let theta = 0;
 
 const pointer = new THREE.Vector2(50, 50);
 const isMobile = window.matchMedia("(max-width: 400px)");
@@ -61,17 +60,17 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    let canvas_dom = renderer.domElement
-    canvas_dom.addEventListener("touchstart", function (event) { event.preventDefault() })
-    canvas_dom.addEventListener("touchmove", function (event) { event.preventDefault() })
-    canvas_dom.addEventListener("touchend", function (event) { event.preventDefault() })
-    canvas_dom.addEventListener("touchcancel", function (event) { event.preventDefault() })
-
+    let canvas_dom = renderer.domElement;
     document.body.appendChild(canvas_dom);
 
+
+
+    // ============================================= EVENT LISTENERS FOR RAYCASTER =============================================
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
+        document.addEventListener('touchstart', onDocumentMouseMove, false);
         document.addEventListener('touchmove', onDocumentMouseMove, false);
+        document.addEventListener('touchend', onDocumentTouchEnd, false);
 
     } else {
 
@@ -92,14 +91,13 @@ function init() {
     interactionManager.add(object);
 
     object.addEventListener("click", (event) => {
-        window.open("https://play.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e", '_blank');
+        window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e", '_blank');
     });
 
 }
 
 
 // ==================================================== FUNCTIONS ========================================================
-
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -110,12 +108,14 @@ function onWindowResize() {
 
         camera.position.z = 600;
         document.removeEventListener('mousemove', onDocumentMouseMove, false);
+        document.addEventListener('touchstart', onDocumentMouseMove, false);
         document.addEventListener('touchmove', onDocumentMouseMove, false);
 
     } else {
 
         camera.position.z = 400;
         document.removeEventListener('touchmove', onDocumentMouseMove, false);
+        document.removeEventListener('touchstart', onDocumentMouseMove, false);
         document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     }
@@ -188,6 +188,18 @@ function render() {
     }
 
     renderer.render(scene, camera);
+
+}
+
+function onDocumentTouchEnd() {
+
+    intersects = raycaster.intersectObjects(scene.children, false);
+
+    if (intersects.length > 0) {
+
+        intersects[0].object.material.color.set(0xFFFFFF);
+
+    }
 
 }
 
