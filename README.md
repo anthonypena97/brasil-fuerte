@@ -22,15 +22,18 @@ A simple site rendering a 3D Box which a user may click and be redirected to my 
 
 ## Table of Contents
 
+- [Usage](#usage)
 - [Installation](#installation)
 - [License](#license)
 - [Contributing](#contributing)
 - [Questions](#questions)
 - [Acknowledgmenets](#Acknowledgments)
 
-## Installation
+## Usage
 
-No Installation necessary, simply visit [Brasil Fuerte](https://anthonypena97.github.io/brasil-fuerte/)
+To experience deployed site, simply visit [Brasil Fuerte](https://anthonypena97.github.io/brasil-fuerte/)
+
+## Installation
 
 To use code for yourself :
 
