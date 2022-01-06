@@ -13,6 +13,16 @@ let INTERSECTED: any;
 const pointer = new THREE.Vector2(50, 50);
 const isMobile = window.matchMedia("(max-width: 400px)");
 
+window.addEventListener(
+    "touchmove" as any,
+    function (event) {
+        if (event.scale !== 1) {
+            event.preventDefault();
+        }
+    },
+    { passive: false }
+);
+
 function init() {
 
     // ==================================================== CAMERA ========================================================
@@ -90,9 +100,24 @@ function init() {
 
     interactionManager.add(object);
 
-    object.addEventListener("click", (event) => {
-        window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e", '_blank');
-    });
+    if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+        object.addEventListener("click", (event) => {
+            window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e");
+            event.preventDefault();
+
+        });
+
+
+    } else {
+
+        object.addEventListener("click", (event) => {
+            window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e", '_blank');
+        });
+
+    }
+
+
 
 }
 
