@@ -80,3 +80,4 @@ Inspiration, code snippets, etc.
 - [Three.js Typescript Boilerplate](https://github.com/Sean-Bradley/Three.js-TypeScript-Boilerplate) by [Sean Bradley](https://github.com/Sean-Bradley)
 - [Mouse Hover Snippet](https://stackoverflow.com/questions/42950341/when-mouseover-hover-on-object-the-mouse-cursor-should-change-three-js/42951493#42951493)
 - [Gif Markdown Redirect](https://meta.stackexchange.com/questions/38915/creating-an-image-link-in-markdown-format)
+- [Emerald Isle Record Page](http://theemeraldisle.us/)
