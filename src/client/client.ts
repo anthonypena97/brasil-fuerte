@@ -11,6 +11,7 @@ let intersects;
 let INTERSECTED: any;
 
 const pointer = new THREE.Vector2(50, 50);
+const mobileClickPointer = new THREE.Vector2(50, 50);
 const isMobile = window.matchMedia("(max-width: 400px)");
 
 window.addEventListener(
@@ -79,7 +80,6 @@ function init() {
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
         document.addEventListener('touchstart', onDocumentMouseMove, false);
-        document.addEventListener('touchstart', onTouch, false);
         document.addEventListener('touchmove', onDocumentMouseMove, false);
         document.addEventListener('touchend', onDocumentTouchEnd, false);
 
@@ -105,14 +105,22 @@ function init() {
 
         object.addEventListener("click", (event) => {
 
-            document.getElementById('aLink').click();
+            onClick();
+
+            setTimeout(function () {
+                document.getElementById('aLink').click()
+            }, 200)
 
         });
 
     } else {
 
         object.addEventListener("click", (event) => {
-            window.open("https://www.anthony-e-pena.com/");
+
+            setTimeout(function () {
+                window.open("https://www.anthony-e-pena.com/");
+            }, 200);
+
         });
 
     }
@@ -127,25 +135,43 @@ function onWindowResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
+    // update vent listeners for raycasting
     if (isMobile.matches) {
 
         camera.position.z = 600;
         document.removeEventListener('mousemove', onDocumentMouseMove, false);
         document.addEventListener('touchstart', onDocumentMouseMove, false);
         document.addEventListener('touchmove', onDocumentMouseMove, false);
+        document.addEventListener('click', onDocumentMouseMove, false);
 
     } else {
 
         camera.position.z = 400;
         document.removeEventListener('touchmove', onDocumentMouseMove, false);
         document.removeEventListener('touchstart', onDocumentMouseMove, false);
+        document.removeEventListener('click', onDocumentMouseMove, false);
         document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     }
 }
 
-function onTouch() {
-    console.log('touched!');
+function onClick() {
+
+    // triggered from object event listener and not raycaster
+
+    (scene.children[0] as any).material.color.set(0x808080);
+
+    setTimeout(onDocumentTouchEnd, 150);
+
+}
+
+
+function onDocumentTouchEnd() {
+
+    // // triggered from document event listener and not raycaster
+
+    (scene.children[0] as any).material.color.set(0xFFFFFF);
+
 }
 
 function onDocumentMouseMove(event) {
@@ -154,6 +180,7 @@ function onDocumentMouseMove(event) {
 
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
+        // pointer logic for touchstart, touchend, touchmove only
         pointer.x = +(event.targetTouches[0].pageX / window.innerWidth) * 2 + -1;
         pointer.y = -(event.targetTouches[0].pageY / window.innerHeight) * 2 + 1;
 
@@ -218,17 +245,6 @@ function render() {
 
 }
 
-function onDocumentTouchEnd() {
-
-    intersects = raycaster.intersectObjects(scene.children, false);
-
-    if (intersects.length > 0) {
-
-        intersects[0].object.material.color.set(0xFFFFFF);
-
-    }
-
-}
 
 // ==================================================== LOAD SCRIPTS ========================================================
 init();
