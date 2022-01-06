@@ -20,7 +20,7 @@ A simple site rendering a 3D Box which a user may click and be redirected to my 
 
 ## Creator Message
 
-Feel free to use this as boilerplate for your own desktop/mobile three.js applications! Peace!
+*Feel free to use this as boilerplate for your own desktop/mobile three.js applications! Peace!*
 
 A simple site rendering a 3D Box which a user may click and be redirected to my Brasilian Top Hits Spotify Playlist.
 
