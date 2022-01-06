@@ -103,14 +103,13 @@ function init() {
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
         object.addEventListener("click", (event) => {
-            window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e", "_blank");
+            linkClicked();
         });
-
 
     } else {
 
         object.addEventListener("click", (event) => {
-            window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e");
+            window.open("https://www.anthony-e-pena.com/");
         });
 
     }
@@ -224,6 +223,12 @@ function onDocumentTouchEnd() {
 
     }
 
+}
+
+function linkClicked() {
+    setTimeout(function () {
+        document.getElementById('aLink').click();
+    }, 3000);
 }
 
 
