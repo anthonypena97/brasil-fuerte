@@ -79,6 +79,7 @@ function init() {
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
         document.addEventListener('touchstart', onDocumentMouseMove, false);
+        document.addEventListener('touchstart', onTouch, false);
         document.addEventListener('touchmove', onDocumentMouseMove, false);
         document.addEventListener('touchend', onDocumentTouchEnd, false);
 
@@ -103,7 +104,9 @@ function init() {
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
         object.addEventListener("click", (event) => {
-            linkClicked();
+
+            document.getElementById('aLink').click();
+
         });
 
     } else {
@@ -113,8 +116,6 @@ function init() {
         });
 
     }
-
-
 
 }
 
@@ -141,6 +142,10 @@ function onWindowResize() {
         document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     }
+}
+
+function onTouch() {
+    console.log('touched!');
 }
 
 function onDocumentMouseMove(event) {
@@ -224,13 +229,6 @@ function onDocumentTouchEnd() {
     }
 
 }
-
-function linkClicked() {
-    setTimeout(function () {
-        document.getElementById('aLink').click();
-    }, 3000);
-}
-
 
 // ==================================================== LOAD SCRIPTS ========================================================
 init();
