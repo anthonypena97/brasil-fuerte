@@ -24,6 +24,13 @@ window.addEventListener(
     { passive: false }
 );
 
+// instagram browser zoom bug fix
+let width = window.innerWidth;
+
+if (window.screen.width < window.innerWidth) {
+    width = window.screen.width
+}
+
 function init() {
 
     // ==================================================== CAMERA ========================================================
