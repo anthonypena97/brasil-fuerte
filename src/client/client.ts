@@ -118,7 +118,7 @@ function init() {
         object.addEventListener("click", (event) => {
 
             setTimeout(function () {
-                window.open("https://www.anthony-e-pena.com/");
+                window.open("https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e");
             }, 200);
 
         });
