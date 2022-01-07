@@ -10,7 +10,7 @@
 
 <p> ---------------------------------------- </p>
 
-Application written in Typescript, using [Three.Js](https://threejs.org/) for WebGl 3D Rendering.
+Application written in Typescript, using [Three.Js](https://threejs.org/) for WebGl 3D Model Rendering.
 
 [THREE.interactive](https://github.com/markuslerner/THREE.Interactive) by [Markus Lerner](https://github.com/markuslerner) is used for 3D Object interactivity.
 
