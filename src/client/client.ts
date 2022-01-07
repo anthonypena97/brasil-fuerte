@@ -6,32 +6,51 @@ import { InteractionManager } from "three.interactive";
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, raycaster: THREE.Raycaster, renderer: THREE.WebGLRenderer;
 let object: THREE.Mesh;
 let planes = [];
-let intersects;
+let intersects: any;
 
 let INTERSECTED: any;
 
 const pointer = new THREE.Vector2(50, 50);
-const mobileClickPointer = new THREE.Vector2(50, 50);
-const isMobile = window.matchMedia("(max-width: 400px)");
+const isMobile = window.matchMedia("(max-width: 530px)");
 
-window.addEventListener(
-    "touchmove" as any,
-    function (event) {
-        if (event.scale !== 1) {
-            event.preventDefault();
-        }
-    },
-    { passive: false }
-);
+// for mobile browsing debugging
+let version = document.getElementById("version");
+let debugConsole = document.getElementById("debugConsole");
+let stats = document.getElementById("stats");
+let canvasSize = document.getElementById("stats");
+// //// UNCOOMMENT FOR DEBUGGING ////
+version.innerHTML = '18';
 
-// instagram browser zoom bug fix
-let width = window.innerWidth;
+let ua = navigator.userAgent || navigator.vendor;
+let isInstagram = (ua.indexOf('Instagram') > -1) ? true : false;
 
-if (window.screen.width < window.innerWidth) {
-    width = window.screen.width
+window.onload = showViewport;
+window.onresize = showViewport;
+
+// fix for instagram in app browser wrong height
+if (isInstagram) {
+
+    // //// UNCOOMMENT FOR DEBUGGING ////
+    // debugConsole.innerHTML = 'instagram';
+
+    setTimeout(function () {
+
+        init();
+        animate();
+
+    }, 2000)
+
+} else {
+
+    init();
+    animate();
+
 }
 
 function init() {
+
+    // //// UNCOOMMENT FOR DEBUGGING ////
+    // canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
 
     // ==================================================== CAMERA ========================================================
     camera = new THREE.PerspectiveCamera(
@@ -82,7 +101,6 @@ function init() {
     document.body.appendChild(canvas_dom);
 
 
-
     // ============================================= EVENT LISTENERS FOR RAYCASTER =============================================
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
@@ -104,9 +122,30 @@ function init() {
         renderer.domElement
     );
 
-    window.addEventListener("resize", onWindowResize);
+    // for when the page is resized - except for instagram
+    if (!isInstagram) {
+
+        window.addEventListener("resize", function () {
+            // delay for innerwidth to be set first - bug resolved
+            setTimeout(onWindowResize, 50)
+        });
+
+    }
+
+    // document.addEventListener("orientationchange", onRotation);
 
     interactionManager.add(object);
+
+    // preventss user from scaling app
+    window.addEventListener(
+        "touchmove" as any,
+        function (event) {
+            if (event.scale !== 1) {
+                event.preventDefault();
+            }
+        },
+        { passive: false }
+    );
 
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
@@ -136,7 +175,17 @@ function init() {
 
 
 // ==================================================== FUNCTIONS ========================================================
+
+function showViewport() {
+
+    // //// UNCOOMMENT FOR DEBUGGING ////
+    // stats.innerHTML = `IW = ${window.innerWidth} x ${window.innerHeight}`
+
+}
+
+
 function onWindowResize() {
+
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
@@ -160,12 +209,23 @@ function onWindowResize() {
         document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     }
+
+    // //// UNCOMMENT FOR DEBUGGING ////
+    // showViewport();
 }
+
+// ///////////////////////////////////////////// *figutre this function out
+// function onRotation() {
+//     screenConsole.innerHTML = 'screen rotated'
+
+//     stats.innerHTML = `IW = ${window.innerWidth} x ${window.innerHeight}`
+
+//     screenConsole.innerHTML = ''
+// }
 
 function onClick() {
 
     // triggered from object event listener and not raycaster
-
     (scene.children[0] as any).material.color.set(0x808080);
 
     setTimeout(onDocumentTouchEnd, 150);
@@ -176,7 +236,6 @@ function onClick() {
 function onDocumentTouchEnd() {
 
     // // triggered from document event listener and not raycaster
-
     (scene.children[0] as any).material.color.set(0xFFFFFF);
 
 }
@@ -224,7 +283,7 @@ function animate() {
 
 function render() {
 
-    // find intersections
+    // findS intersections
     raycaster.setFromCamera(pointer, camera);
 
     intersects = raycaster.intersectObjects(scene.children, false);
@@ -251,8 +310,3 @@ function render() {
     renderer.render(scene, camera);
 
 }
-
-
-// ==================================================== LOAD SCRIPTS ========================================================
-init();
-animate();
