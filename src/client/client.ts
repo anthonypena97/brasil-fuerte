@@ -1,3 +1,5 @@
+// TESTED ON DESKTOP CHROME - SAFARI iOS - CHROME iOS - INSTAGRAM - TWITTER - 01/07/2022
+
 import * as THREE from "three";
 import { InteractionManager } from "three.interactive";
 
@@ -11,7 +13,7 @@ let intersects: any;
 let INTERSECTED: any;
 
 const pointer = new THREE.Vector2(50, 50);
-const isMobile = window.matchMedia("(max-width: 530px)");
+const isMobile = window.matchMedia("(max-width: 675px)");
 
 // for mobile browsing debugging
 let version = document.getElementById("version");
@@ -19,7 +21,7 @@ let debugConsole = document.getElementById("debugConsole");
 let stats = document.getElementById("stats");
 let canvasSize = document.getElementById("stats");
 // //// UNCOOMMENT FOR DEBUGGING ////
-version.innerHTML = '18';
+// version.innerHTML = '18';
 
 let ua = navigator.userAgent || navigator.vendor;
 let isInstagram = (ua.indexOf('Instagram') > -1) ? true : false;
@@ -132,8 +134,6 @@ function init() {
 
     }
 
-    // document.addEventListener("orientationchange", onRotation);
-
     interactionManager.add(object);
 
     // preventss user from scaling app
@@ -153,6 +153,7 @@ function init() {
 
             onClick();
 
+            // using a mock href click to avoid google chrome iOS app loading a blank page
             setTimeout(function () {
                 document.getElementById('aLink').click()
             }, 200)
@@ -176,6 +177,7 @@ function init() {
 
 // ==================================================== FUNCTIONS ========================================================
 
+// for debugging
 function showViewport() {
 
     // //// UNCOOMMENT FOR DEBUGGING ////
@@ -214,18 +216,10 @@ function onWindowResize() {
     // showViewport();
 }
 
-// ///////////////////////////////////////////// *figutre this function out
-// function onRotation() {
-//     screenConsole.innerHTML = 'screen rotated'
-
-//     stats.innerHTML = `IW = ${window.innerWidth} x ${window.innerHeight}`
-
-//     screenConsole.innerHTML = ''
-// }
-
 function onClick() {
 
     // triggered from object event listener and not raycaster
+    // turns object temporarily grey to mimick press
     (scene.children[0] as any).material.color.set(0x808080);
 
     setTimeout(onDocumentTouchEnd, 150);
@@ -252,9 +246,11 @@ function onDocumentMouseMove(event) {
 
     } else {
 
+        // pointer coordinate desktop pointer to turn to mouse it floats above object
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
+        // pointer coordinates for turning object grey if mouse is above object
         pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
