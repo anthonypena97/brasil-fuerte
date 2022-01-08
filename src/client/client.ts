@@ -1,7 +1,6 @@
-// TESTED ON DESKTOP CHROME - SAFARI iOS - CHROME iOS - INSTAGRAM - TWITTER - 01/07/2022
+// TESTED ON DESKTOP CHROME - SAFARI iOS - CHROME iOS - INSTAGRAM - TWITTER - 01/08/2022
 
 import * as THREE from "three";
-import { CameraHelper } from "three";
 import { InteractionManager } from "three.interactive";
 
 // ==================================================== GLOBAL SCOPE DECLARATIONS ========================================================
@@ -26,19 +25,17 @@ let canvasSize = document.getElementById("canvasSize");
 
 // //// UNCOOMMENT FOR DEBUGGING ////
 // devevelopment version
-version.innerHTML = '43';
+// version.innerHTML = '44';
 
 let ua = navigator.userAgent || navigator.vendor;
 let isInstagram = (ua.indexOf('Instagram') > -1) ? true : false;
 
 
 // ============================================================ SCRIPT CALLS  ==============================================================
-// chrome ios full width workaound
-checkLandscape();
 
-// //// for debugging - functions for displaying pages sizes
-window.onload = showViewport;
-window.onresize = showViewport;
+// //// UNCOMMENT FOR DEBUGGING - functions for displaying pages sizes ////
+// window.onload = showViewport;
+// window.onresize = showViewport;
 
 // fix for instagram in app browser wrong height
 if (isInstagram) {
@@ -51,7 +48,7 @@ if (isInstagram) {
         init();
         animate();
 
-    }, 2000)
+    }, 1000)
 
 } else {
 
@@ -65,7 +62,7 @@ if (isInstagram) {
 function init() {
 
     // //// UNCOOMMENT FOR DEBUGGING ////
-    canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
+    // canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
 
     // ==================================================== CAMERA ========================================================
     camera = new THREE.PerspectiveCamera(
@@ -108,14 +105,19 @@ function init() {
 
 
     // ==================================================== RENDERER ========================================================
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     canvas_dom = renderer.domElement;
     document.body.appendChild(canvas_dom);
 
+    // chrome ios full width workaound
+    checkLandscape();
+
+    // //// UNCOMMENT FOR DEBBUGIN -to receive information on camera data
     // debugConsole.innerHTML = `${JSON.stringify(camera.toJSON())}`
+
 
     // ============================================= EVENT LISTENERS FOR RAYCASTER =============================================
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -140,15 +142,19 @@ function init() {
 
     interactionManager.add(object);
 
-    // ==================================================== EVENT LISTENERS ========================================================
 
+    // ==================================================== EVENT LISTENERS ========================================================
     // for when the page is resized - except for instagram
     if (!isInstagram) {
 
+        // event listener for resize logic - delay so proper measurements are made
         window.addEventListener("resize", function () {
             // delay for innerwidth to be set first - bug resolved
-            setTimeout(onWindowResize, 1000)
+            setTimeout(onWindowResize, 25)
         }, false);
+
+        // event listener without delay for fade anumation
+        window.addEventListener('resize', fadeAnimation)
 
     }
 
@@ -192,20 +198,18 @@ function init() {
 
 
 // ==================================================== FUNCTIONS ========================================================
-
 // for debugging
 function showViewport() {
 
     // //// UNCOOMMENT FOR DEBUGGING ////
-    stats.innerHTML = `IW = ${window.innerWidth} x ${window.innerHeight}`
+    // stats.innerHTML = `IW = ${window.innerWidth} x ${window.innerHeight}`
 
 }
 
 function onWindowResize() {
 
     // //// UNCOOMMENT FOR DEBUGGING ////
-    canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
-
+    // canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
 
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -253,15 +257,13 @@ function checkLandscape() {
 
         document.getElementsByClassName('html')[0].setAttribute('style', 'zoom:1.5');
 
-        debugConsole.innerHTML = 'landscape';
-
         let middleX = innerWidth * 1.5 / 6;
-        let middleY = innerHeight * 1.5 / 5;
+        let middleY = innerHeight * 1.5 / 6;
 
         // scroll to center for chrome ios full width workaoround
         setTimeout(function () {
             window.scrollTo(middleX, middleY);
-        }, 250);
+        }, 100);
 
     } else {
 
@@ -320,6 +322,18 @@ function onDocumentMouseMove(event) {
     } else {
         $('html,body').css('cursor', 'default');
     }
+}
+
+function fadeAnimation() {
+
+    document.getElementsByTagName('canvas')[0].className = "canvasHidden";
+
+    setTimeout(function () {
+
+        document.getElementsByTagName('canvas')[0].className = "canvasFade";
+
+    }, 500)
+
 }
 
 function animate() {
