@@ -1,33 +1,48 @@
-// TESTED ON DESKTOP CHROME - SAFARI iOS - CHROME iOS - INSTAGRAM - TWITTER - 01/07/2022
+// TESTED ON DESKTOP CHROME - SAFARI iOS - CHROME iOS - INSTAGRAM - TWITTER - 01/08/2022
 
 import * as THREE from "three";
+import { Vector3 } from "three";
 import { InteractionManager } from "three.interactive";
 
 // ==================================================== GLOBAL SCOPE DECLARATIONS ========================================================
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, raycaster: THREE.Raycaster, renderer: THREE.WebGLRenderer;
 let object: THREE.Mesh;
+let canvas_dom;
 let planes = [];
 let intersects: any;
 
+let target2 = new THREE.Vector2();
+let target3 = new THREE.Vector3();
+let target4 = new THREE.Vector4();
+
 let INTERSECTED: any;
 
+let zoom: any;
+
 const pointer = new THREE.Vector2(50, 50);
-const isMobile = window.matchMedia("(max-width: 675px)");
+const isMobile = window.matchMedia("(max-width: 900px)");
+const isMobileLandscape = window.matchMedia("(max-width: 900px) and (min-width: 700px)");
 
 // for mobile browsing debugging
 let version = document.getElementById("version");
 let debugConsole = document.getElementById("debugConsole");
 let stats = document.getElementById("stats");
-let canvasSize = document.getElementById("stats");
+let canvasSize = document.getElementById("canvasSize");
+
 // //// UNCOOMMENT FOR DEBUGGING ////
-// version.innerHTML = '18';
+// devevelopment version
+// version.innerHTML = '44';
 
 let ua = navigator.userAgent || navigator.vendor;
 let isInstagram = (ua.indexOf('Instagram') > -1) ? true : false;
 
-window.onload = showViewport;
-window.onresize = showViewport;
+
+// ============================================================ SCRIPT CALLS  ==============================================================
+
+// //// UNCOMMENT FOR DEBUGGING - functions for displaying pages sizes ////
+// window.onload = showViewport;
+// window.onresize = showViewport;
 
 // fix for instagram in app browser wrong height
 if (isInstagram) {
@@ -40,7 +55,7 @@ if (isInstagram) {
         init();
         animate();
 
-    }, 2000)
+    }, 1000)
 
 } else {
 
@@ -48,6 +63,8 @@ if (isInstagram) {
     animate();
 
 }
+
+// ============================================================ MAIN LOGIC STRUCTURE  =======================================================
 
 function init() {
 
@@ -58,7 +75,7 @@ function init() {
     camera = new THREE.PerspectiveCamera(
         70,
         window.innerWidth / window.innerHeight,
-        1,
+        0.1,
         1000
     );
 
@@ -95,12 +112,22 @@ function init() {
 
 
     // ==================================================== RENDERER ========================================================
-    renderer = new THREE.WebGLRenderer();
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio * 1.5);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    let canvas_dom = renderer.domElement;
+    canvas_dom = renderer.domElement;
     document.body.appendChild(canvas_dom);
+
+    document.getElementsByTagName('body')[0].classList.add('pageLock');
+
+    fadeAnimation();
+
+    // chrome ios full width workaound
+    checkLandscape();
+
+    // //// UNCOMMENT FOR DEBBUGIN -to receive information on camera data
+    // debugConsole.innerHTML = `${JSON.stringify(camera.toJSON())}`
 
 
     // ============================================= EVENT LISTENERS FOR RAYCASTER =============================================
@@ -124,17 +151,21 @@ function init() {
         renderer.domElement
     );
 
+    interactionManager.add(object);
+
+
+    // ==================================================== EVENT LISTENERS ========================================================
     // for when the page is resized - except for instagram
     if (!isInstagram) {
 
+        // event listener for resize logic - delay so proper measurements are made
         window.addEventListener("resize", function () {
             // delay for innerwidth to be set first - bug resolved
-            setTimeout(onWindowResize, 50)
+            fadeAnimation();
+            setTimeout(onWindowResize, 400)
         });
 
     }
-
-    interactionManager.add(object);
 
     // preventss user from scaling app
     window.addEventListener(
@@ -176,7 +207,6 @@ function init() {
 
 
 // ==================================================== FUNCTIONS ========================================================
-
 // for debugging
 function showViewport() {
 
@@ -185,36 +215,91 @@ function showViewport() {
 
 }
 
-
 function onWindowResize() {
+
+    // //// UNCOOMMENT FOR DEBUGGING ////
+    // canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
 
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    // update vent listeners for raycasting
-    if (isMobile.matches) {
+    // //// UNCOMMENT FOR DEBUGGING - returns information on the camera ////
+    // debugConsole.innerHTML = `${JSON.stringify(camera.toJSON())}`
 
-        camera.position.z = 600;
-        document.removeEventListener('mousemove', onDocumentMouseMove, false);
-        document.addEventListener('touchstart', onDocumentMouseMove, false);
-        document.addEventListener('touchmove', onDocumentMouseMove, false);
-        document.addEventListener('click', onDocumentMouseMove, false);
+    // update event listeners for raycasting
+    // only changes camera and event listeners if its on the desktop - not on mobile as it causes bugs
+    if (!isMobile.matches || !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
-    } else {
+        if (isMobile.matches) {
 
-        camera.position.z = 400;
-        document.removeEventListener('touchmove', onDocumentMouseMove, false);
-        document.removeEventListener('touchstart', onDocumentMouseMove, false);
-        document.removeEventListener('click', onDocumentMouseMove, false);
-        document.addEventListener('mousemove', onDocumentMouseMove, false);
+            camera.position.z = 600;
+            document.removeEventListener('mousemove', onDocumentMouseMove, false);
+            document.addEventListener('touchstart', onDocumentMouseMove, false);
+            document.addEventListener('touchmove', onDocumentMouseMove, false);
+            document.addEventListener('click', onDocumentMouseMove, false);
+
+        } else {
+
+            camera.position.z = 400;
+            document.removeEventListener('touchmove', onDocumentMouseMove, false);
+            document.removeEventListener('touchstart', onDocumentMouseMove, false);
+            document.removeEventListener('click', onDocumentMouseMove, false);
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+
+        }
 
     }
 
-    // //// UNCOMMENT FOR DEBUGGING ////
+    checkLandscape()
+
+    // //// UNCOMMENT FOR DEBUGGING - returns the innerwidth and the innerheight ////
     // showViewport();
+
 }
+
+function checkLandscape() {
+
+    // chrome ios full width workaound
+    if (isMobileLandscape.matches) {
+
+        zoom = 1.5
+
+        document.getElementsByTagName('body')[0].classList.remove('pageLock');
+        document.getElementsByTagName('body')[0].classList.add('pageUnlock');
+
+        renderer.setSize(window.innerWidth * zoom, window.innerHeight * zoom);
+
+        // //// UNCOMMENT FOR DEBUG - to check canvas is adjusted////
+        // console.log(renderer.getSize(target2));
+
+        let middleX = innerWidth * zoom / 6;
+        let middleY = innerHeight * zoom / 6;
+
+        // scroll to center for chrome ios full width workaoround
+        setTimeout(function () {
+
+            window.scrollTo(middleX, middleY);
+
+            setTimeout(function () {
+
+                document.getElementsByTagName('body')[0].classList.remove('pageUnlock');
+                document.getElementsByTagName('body')[0].classList.add('pageLock');
+
+            }, 250)
+
+
+        }, 100);
+
+    } else {
+
+        document.getElementsByClassName('html')[0].setAttribute('style', 'zoom:1');
+        zoom = 1;
+
+    }
+
+};
 
 function onClick() {
 
@@ -241,18 +326,18 @@ function onDocumentMouseMove(event) {
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
         // pointer logic for touchstart, touchend, touchmove only
-        pointer.x = +(event.targetTouches[0].pageX / window.innerWidth) * 2 + -1;
-        pointer.y = -(event.targetTouches[0].pageY / window.innerHeight) * 2 + 1;
+        pointer.x = +(event.targetTouches[0].pageX / window.innerWidth) * 2 + -zoom;
+        pointer.y = -(event.targetTouches[0].pageY / window.innerHeight) * 2 + zoom;
 
     } else {
 
         // pointer coordinate desktop pointer to turn to mouse it floats above object
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        mouse.x = (event.clientX / window.innerWidth) * 2 - zoom;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + zoom;
 
         // pointer coordinates for turning object grey if mouse is above object
-        pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-        pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        pointer.x = (event.clientX / window.innerWidth) * 2 - zoom;
+        pointer.y = - (event.clientY / window.innerHeight) * 2 + zoom;
 
     }
 
@@ -265,6 +350,18 @@ function onDocumentMouseMove(event) {
     } else {
         $('html,body').css('cursor', 'default');
     }
+}
+
+function fadeAnimation() {
+
+    document.getElementsByTagName('canvas')[0].className = "canvasHidden";
+
+    setTimeout(function () {
+
+        document.getElementsByTagName('canvas')[0].className = "canvasFade";
+
+    }, 400)
+
 }
 
 function animate() {
