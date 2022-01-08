@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <!-- <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" /> -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="keywors"
+        content="anthony,pena,anthonypena97,anthonypena,threejs,3dmodeling,coding,gallery,virtual,reality">
+    <title>BRASIL FUERTE</title>
+    <link rel="icon" type="image/ico" href="images/brasil-fuerte-icon.ico" />
+    <link rel="shortcut icon" type="image/png" href="images/brasil-fuerte-icon.ico" />
+    <link rel="apple-touch-icon" href="images/brasil-fuerte-icon.ico" />
+
+    <!-- WRITTEN BY ANTHONY PEÑA @anthonypena97 -->
+    <!-- TESTED ON DESKTOP CHROME - SAFARI iOS - CHROME iOS - INSTAGRAM - TWITTER - 01/07/2022 -->
+
+    <style>
+        html {
+            width: 100vw;
+            padding: 0;
+            margin: 0;
+            transform: scale(1.15, 1.15)
+        }
+
+        body {
+            background-color: purple;
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        p {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        body,
+        canvas {
+            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            margin: 0;
+            user-select: none;
+
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            outline: none;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        }
+
+        canvas {
+            position: relative;
+            width: 120vw;
+            height: 100vh;
+        }
+
+        p {
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        :root {
+            touch-action: pan-x pan-y;
+            height: 100%
+        }
+
+        @supports(padding:max(0px)) {
+
+            body,
+            header,
+            footer {
+                padding-left: min(0vmin, env(safe-area-inset-left));
+                padding-right: min(0vmin, env(safe-area-inset-right));
+            }
+        }
+
+        /* mobiles */
+        @media screen and (max-width: 580px) {
+
+            body,
+            canvas {
+                cursor: default;
+            }
+        }
+    </style>
+</head>
+
+<body unselectable="on">
+
+    <p style="color:red;position:fixed;z-index: 30" id="version"></p>
+    <p style="color:red;position:fixed;top:20px;z-index: 40" id="stats"></p>
+    <p style="color:red;position:fixed;top:40px;z-index: 50" id="canvasSize"></p>
+    <p style="color:red;position:fixed;top:80px;z-index: 60" id="debugConsole"></p>
+
+
+    <a href="https://open.spotify.com/playlist/3I6ckbR7LxRVh6TDA7INpE?si=0067dadf6f6f4c2e" id="aLink" target="_blank"
+        unselectable="on"></a>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+    <script type="module" src="bundle.js"></script>
+</body>
+
+</html>
