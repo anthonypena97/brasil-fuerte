@@ -51,14 +51,12 @@
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
+            width: 100%;
+            word-wrap: break-word;
         }
 
         body,
         canvas {
-            overflow: hidden;
-            overflow-x: hidden;
-            overflow-y: hidden;
-
             margin: 0;
             user-select: none;
 
@@ -84,12 +82,23 @@
         }
 
         .canvasFade {
-            transition: opacity 1s ease;
+            transition: opacity 2s ease;
+            -webkit-transition: opacity ease-in-out 2s;
+            -moz-transition: opacity ease-in-out 2s;
+            -o-transition: opacity ease-in-out 2s;
+            transition: opacity ease-in-out 2s;
         }
 
-        p {
-            width: 100%;
-            word-wrap: break-word;
+        .pageUnlock {
+            overflow: visible;
+            overflow-x: visible;
+            overflow-y: visible;
+        }
+
+        .pageLock {
+            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: hidden;
         }
 
         :root {

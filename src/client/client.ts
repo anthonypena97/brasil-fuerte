@@ -1,6 +1,7 @@
 // TESTED ON DESKTOP CHROME - SAFARI iOS - CHROME iOS - INSTAGRAM - TWITTER - 01/08/2022
 
 import * as THREE from "three";
+import { Vector3 } from "three";
 import { InteractionManager } from "three.interactive";
 
 // ==================================================== GLOBAL SCOPE DECLARATIONS ========================================================
@@ -11,7 +12,13 @@ let canvas_dom;
 let planes = [];
 let intersects: any;
 
+let target2 = new THREE.Vector2();
+let target3 = new THREE.Vector3();
+let target4 = new THREE.Vector4();
+
 let INTERSECTED: any;
+
+let zoom: any;
 
 const pointer = new THREE.Vector2(50, 50);
 const isMobile = window.matchMedia("(max-width: 900px)");
@@ -106,11 +113,15 @@ function init() {
 
     // ==================================================== RENDERER ========================================================
     renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(window.devicePixelRatio * 1.5);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     canvas_dom = renderer.domElement;
     document.body.appendChild(canvas_dom);
+
+    document.getElementsByTagName('body')[0].classList.add('pageLock');
+
+    fadeAnimation();
 
     // chrome ios full width workaound
     checkLandscape();
@@ -150,11 +161,9 @@ function init() {
         // event listener for resize logic - delay so proper measurements are made
         window.addEventListener("resize", function () {
             // delay for innerwidth to be set first - bug resolved
-            setTimeout(onWindowResize, 25)
-        }, false);
-
-        // event listener without delay for fade anumation
-        window.addEventListener('resize', fadeAnimation)
+            fadeAnimation();
+            setTimeout(onWindowResize, 400)
+        });
 
     }
 
@@ -255,19 +264,38 @@ function checkLandscape() {
     // chrome ios full width workaound
     if (isMobileLandscape.matches) {
 
-        document.getElementsByClassName('html')[0].setAttribute('style', 'zoom:1.5');
+        zoom = 1.5
 
-        let middleX = innerWidth * 1.5 / 6;
-        let middleY = innerHeight * 1.5 / 6;
+        document.getElementsByTagName('body')[0].classList.remove('pageLock');
+        document.getElementsByTagName('body')[0].classList.add('pageUnlock');
+
+        renderer.setSize(window.innerWidth * zoom, window.innerHeight * zoom);
+
+        // //// UNCOMMENT FOR DEBUG - to check canvas is adjusted////
+        // console.log(renderer.getSize(target2));
+
+        let middleX = innerWidth * zoom / 6;
+        let middleY = innerHeight * zoom / 6;
 
         // scroll to center for chrome ios full width workaoround
         setTimeout(function () {
+
             window.scrollTo(middleX, middleY);
+
+            setTimeout(function () {
+
+                document.getElementsByTagName('body')[0].classList.remove('pageUnlock');
+                document.getElementsByTagName('body')[0].classList.add('pageLock');
+
+            }, 250)
+
+
         }, 100);
 
     } else {
 
         document.getElementsByClassName('html')[0].setAttribute('style', 'zoom:1');
+        zoom = 1;
 
     }
 
@@ -298,18 +326,18 @@ function onDocumentMouseMove(event) {
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
         // pointer logic for touchstart, touchend, touchmove only
-        pointer.x = +(event.targetTouches[0].pageX / window.innerWidth) * 2 + -1;
-        pointer.y = -(event.targetTouches[0].pageY / window.innerHeight) * 2 + 1;
+        pointer.x = +(event.targetTouches[0].pageX / window.innerWidth) * 2 + -zoom;
+        pointer.y = -(event.targetTouches[0].pageY / window.innerHeight) * 2 + zoom;
 
     } else {
 
         // pointer coordinate desktop pointer to turn to mouse it floats above object
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        mouse.x = (event.clientX / window.innerWidth) * 2 - zoom;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + zoom;
 
         // pointer coordinates for turning object grey if mouse is above object
-        pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-        pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        pointer.x = (event.clientX / window.innerWidth) * 2 - zoom;
+        pointer.y = - (event.clientY / window.innerHeight) * 2 + zoom;
 
     }
 
@@ -332,7 +360,7 @@ function fadeAnimation() {
 
         document.getElementsByTagName('canvas')[0].className = "canvasFade";
 
-    }, 500)
+    }, 400)
 
 }
 
