@@ -16,6 +16,7 @@ let INTERSECTED: any;
 
 const pointer = new THREE.Vector2(50, 50);
 const isMobile = window.matchMedia("(max-width: 900px)");
+const isMobileLandscape = window.matchMedia("(max-width: 900px) and (min-width: 700px)");
 
 // for mobile browsing debugging
 let version = document.getElementById("version");
@@ -25,17 +26,15 @@ let canvasSize = document.getElementById("canvasSize");
 
 // //// UNCOOMMENT FOR DEBUGGING ////
 // devevelopment version
-version.innerHTML = '42';
+version.innerHTML = '43';
 
 let ua = navigator.userAgent || navigator.vendor;
 let isInstagram = (ua.indexOf('Instagram') > -1) ? true : false;
 
 
 // ============================================================ SCRIPT CALLS  ==============================================================
-// scroll to center for chrome ios full width workaoround
-setTimeout(function () {
-    window.scrollTo(200, 200)
-}, 250);
+// chrome ios full width workaound
+checkLandscape();
 
 // //// for debugging - functions for displaying pages sizes
 window.onload = showViewport;
@@ -204,16 +203,16 @@ function showViewport() {
 
 function onWindowResize() {
 
-    console.log('size')
-
     // //// UNCOOMMENT FOR DEBUGGING ////
     canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
+
 
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
+    // //// UNCOMMENT FOR DEBUGGING - returns information on the camera ////
     // debugConsole.innerHTML = `${JSON.stringify(camera.toJSON())}`
 
     // update event listeners for raycasting
@@ -240,10 +239,37 @@ function onWindowResize() {
 
     }
 
-    // //// UNCOMMENT FOR DEBUGGING ////
+    checkLandscape()
+
+    // //// UNCOMMENT FOR DEBUGGING - returns the innerwidth and the innerheight ////
     // showViewport();
 
 }
+
+function checkLandscape() {
+
+    // chrome ios full width workaound
+    if (isMobileLandscape.matches) {
+
+        document.getElementsByClassName('html')[0].setAttribute('style', 'zoom:1.5');
+
+        debugConsole.innerHTML = 'landscape';
+
+        let middleX = innerWidth * 1.5 / 6;
+        let middleY = innerHeight * 1.5 / 5;
+
+        // scroll to center for chrome ios full width workaoround
+        setTimeout(function () {
+            window.scrollTo(middleX, middleY);
+        }, 250);
+
+    } else {
+
+        document.getElementsByClassName('html')[0].setAttribute('style', 'zoom:1');
+
+    }
+
+};
 
 function onClick() {
 
