@@ -1,31 +1,43 @@
 // TESTED ON DESKTOP CHROME - SAFARI iOS - CHROME iOS - INSTAGRAM - TWITTER - 01/07/2022
 
 import * as THREE from "three";
+import { CameraHelper } from "three";
 import { InteractionManager } from "three.interactive";
 
 // ==================================================== GLOBAL SCOPE DECLARATIONS ========================================================
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, raycaster: THREE.Raycaster, renderer: THREE.WebGLRenderer;
 let object: THREE.Mesh;
+let canvas_dom;
 let planes = [];
 let intersects: any;
 
 let INTERSECTED: any;
 
 const pointer = new THREE.Vector2(50, 50);
-const isMobile = window.matchMedia("(max-width: 675px)");
+const isMobile = window.matchMedia("(max-width: 900px)");
 
 // for mobile browsing debugging
 let version = document.getElementById("version");
 let debugConsole = document.getElementById("debugConsole");
 let stats = document.getElementById("stats");
-let canvasSize = document.getElementById("stats");
+let canvasSize = document.getElementById("canvasSize");
+
 // //// UNCOOMMENT FOR DEBUGGING ////
-// version.innerHTML = '18';
+// devevelopment version
+version.innerHTML = '42';
 
 let ua = navigator.userAgent || navigator.vendor;
 let isInstagram = (ua.indexOf('Instagram') > -1) ? true : false;
 
+
+// ============================================================ SCRIPT CALLS  ==============================================================
+// scroll to center for chrome ios full width workaoround
+setTimeout(function () {
+    window.scrollTo(200, 200)
+}, 250);
+
+// //// for debugging - functions for displaying pages sizes
 window.onload = showViewport;
 window.onresize = showViewport;
 
@@ -49,16 +61,18 @@ if (isInstagram) {
 
 }
 
+// ============================================================ MAIN LOGIC STRUCTURE  =======================================================
+
 function init() {
 
     // //// UNCOOMMENT FOR DEBUGGING ////
-    // canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
+    canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
 
     // ==================================================== CAMERA ========================================================
     camera = new THREE.PerspectiveCamera(
         70,
         window.innerWidth / window.innerHeight,
-        1,
+        0.1,
         1000
     );
 
@@ -99,9 +113,10 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    let canvas_dom = renderer.domElement;
+    canvas_dom = renderer.domElement;
     document.body.appendChild(canvas_dom);
 
+    // debugConsole.innerHTML = `${JSON.stringify(camera.toJSON())}`
 
     // ============================================= EVENT LISTENERS FOR RAYCASTER =============================================
     if (isMobile.matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -124,17 +139,19 @@ function init() {
         renderer.domElement
     );
 
+    interactionManager.add(object);
+
+    // ==================================================== EVENT LISTENERS ========================================================
+
     // for when the page is resized - except for instagram
     if (!isInstagram) {
 
         window.addEventListener("resize", function () {
             // delay for innerwidth to be set first - bug resolved
-            setTimeout(onWindowResize, 50)
-        });
+            setTimeout(onWindowResize, 1000)
+        }, false);
 
     }
-
-    interactionManager.add(object);
 
     // preventss user from scaling app
     window.addEventListener(
@@ -181,39 +198,51 @@ function init() {
 function showViewport() {
 
     // //// UNCOOMMENT FOR DEBUGGING ////
-    // stats.innerHTML = `IW = ${window.innerWidth} x ${window.innerHeight}`
+    stats.innerHTML = `IW = ${window.innerWidth} x ${window.innerHeight}`
 
 }
 
-
 function onWindowResize() {
+
+    console.log('size')
+
+    // //// UNCOOMMENT FOR DEBUGGING ////
+    canvasSize.innerHTML = `C = ${window.innerWidth} x ${window.innerHeight}`
 
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    // update vent listeners for raycasting
-    if (isMobile.matches) {
+    // debugConsole.innerHTML = `${JSON.stringify(camera.toJSON())}`
 
-        camera.position.z = 600;
-        document.removeEventListener('mousemove', onDocumentMouseMove, false);
-        document.addEventListener('touchstart', onDocumentMouseMove, false);
-        document.addEventListener('touchmove', onDocumentMouseMove, false);
-        document.addEventListener('click', onDocumentMouseMove, false);
+    // update event listeners for raycasting
+    // only changes camera and event listeners if its on the desktop - not on mobile as it causes bugs
+    if (!isMobile.matches || !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
-    } else {
+        if (isMobile.matches) {
 
-        camera.position.z = 400;
-        document.removeEventListener('touchmove', onDocumentMouseMove, false);
-        document.removeEventListener('touchstart', onDocumentMouseMove, false);
-        document.removeEventListener('click', onDocumentMouseMove, false);
-        document.addEventListener('mousemove', onDocumentMouseMove, false);
+            camera.position.z = 600;
+            document.removeEventListener('mousemove', onDocumentMouseMove, false);
+            document.addEventListener('touchstart', onDocumentMouseMove, false);
+            document.addEventListener('touchmove', onDocumentMouseMove, false);
+            document.addEventListener('click', onDocumentMouseMove, false);
+
+        } else {
+
+            camera.position.z = 400;
+            document.removeEventListener('touchmove', onDocumentMouseMove, false);
+            document.removeEventListener('touchstart', onDocumentMouseMove, false);
+            document.removeEventListener('click', onDocumentMouseMove, false);
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+
+        }
 
     }
 
     // //// UNCOMMENT FOR DEBUGGING ////
     // showViewport();
+
 }
 
 function onClick() {
