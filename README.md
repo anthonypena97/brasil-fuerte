@@ -28,12 +28,12 @@ A simple site rendering a 3D Box which a user may click and be redirected to my 
 
 - [Usage](#usage)
 - [Installation](#installation)
-- [Notes](#Notes)
+- [Notes](#notes)
 - [License](#license)
-- [Version History](#Version History)
+- [Version History](#version)
 - [Contributing](#contributing)
 - [Questions](#questions)
-- [Acknowledgmenets](#Acknowledgments)
+- [Acknowledgmenets](#acknowledgments)
 
 ## Usage
 
@@ -69,8 +69,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Version History
 
-- 0.1
-  - Initial Release
+- v1.2.1 is latest version
   - - See [commit change](https://github.com/anthonypena97/brasil-fuerte/commits/main) or See [release history](https://github.com/anthonypena97/braisl-fuerte/releases)
 
 ## Contributing
