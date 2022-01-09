@@ -28,7 +28,9 @@ A simple site rendering a 3D Box which a user may click and be redirected to my 
 
 - [Usage](#usage)
 - [Installation](#installation)
+- [Notes](#Notes)
 - [License](#license)
+- [Version History](#Version History)
 - [Contributing](#contributing)
 - [Questions](#questions)
 - [Acknowledgmenets](#Acknowledgments)
@@ -48,6 +50,10 @@ To use code for yourself :
 - enter, `npm run build` once complete
 - copy new bundle.js, index.html, and any public assets from dist/client/ folder
 - use copied files for deployment
+
+## Notes
+
+This application has been tested through and written for Chrome v.97, Safari v.14, iOS v.14, Safari iOs, Chrome iOs, and Instagram. This application is responsive to both Desktop and Mobile use cases.
 
 ## License
 
