@@ -68,10 +68,10 @@
             user-select: none;
             outline: none;
             -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+
         }
 
         canvas {
-            position: relative;
             z-index: 2;
             opacity: 1;
         }
@@ -87,6 +87,14 @@
             -moz-transition: opacity ease-in-out 2s;
             -o-transition: opacity ease-in-out 2s;
             transition: opacity ease-in-out 2s;
+        }
+
+        .canvasRelative {
+            position: relative;
+        }
+
+        .canvasFixed {
+            position: fixed;
         }
 
         .pageUnlock {

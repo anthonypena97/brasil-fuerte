@@ -8,7 +8,7 @@ import { InteractionManager } from "three.interactive";
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, raycaster: THREE.Raycaster, renderer: THREE.WebGLRenderer;
 let object: THREE.Mesh;
-let canvas_dom;
+let canvas_dom: any;
 let planes = [];
 let intersects: any;
 
@@ -18,7 +18,7 @@ let target4 = new THREE.Vector4();
 
 let INTERSECTED: any;
 
-let zoom: any;
+let zoom = 1;
 
 const pointer = new THREE.Vector2(50, 50);
 const isMobile = window.matchMedia("(max-width: 900px)");
@@ -32,7 +32,7 @@ let canvasSize = document.getElementById("canvasSize");
 
 // //// UNCOOMMENT FOR DEBUGGING ////
 // devevelopment version
-// version.innerHTML = '44';
+// version.innerHTML = '50';
 
 let ua = navigator.userAgent || navigator.vendor;
 let isInstagram = (ua.indexOf('Instagram') > -1) ? true : false;
@@ -120,6 +120,8 @@ function init() {
     document.body.appendChild(canvas_dom);
 
     document.getElementsByTagName('body')[0].classList.add('pageLock');
+    document.getElementsByTagName('canvas')[0].classList.add('canvasFixed');
+
 
     fadeAnimation();
 
@@ -162,7 +164,7 @@ function init() {
         window.addEventListener("resize", function () {
             // delay for innerwidth to be set first - bug resolved
             fadeAnimation();
-            setTimeout(onWindowResize, 400)
+            setTimeout(onWindowResize, 250)
         });
 
     }
@@ -267,7 +269,12 @@ function checkLandscape() {
         zoom = 1.5
 
         document.getElementsByTagName('body')[0].classList.remove('pageLock');
+        document.getElementsByTagName('canvas')[0].classList.remove('canvasFixed');
+
+        // canvas need to be in relative position forlandscape
         document.getElementsByTagName('body')[0].classList.add('pageUnlock');
+        document.getElementsByTagName('canvas')[0].classList.add('canvasRelative');
+
 
         renderer.setSize(window.innerWidth * zoom, window.innerHeight * zoom);
 
@@ -294,8 +301,11 @@ function checkLandscape() {
 
     } else {
 
-        document.getElementsByClassName('html')[0].setAttribute('style', 'zoom:1');
         zoom = 1;
+        document.getElementsByClassName('html')[0].setAttribute('style', 'zoom:1');
+
+        document.getElementsByTagName('body')[0].classList.add('pageLock');
+        document.getElementsByTagName('canvas')[0].classList.add('canvasFixed');
 
     }
 
@@ -316,7 +326,7 @@ function onDocumentTouchEnd() {
 
     // // triggered from document event listener and not raycaster
     (scene.children[0] as any).material.color.set(0xFFFFFF);
-
+    // 
 }
 
 function onDocumentMouseMove(event) {
@@ -354,13 +364,15 @@ function onDocumentMouseMove(event) {
 
 function fadeAnimation() {
 
-    document.getElementsByTagName('canvas')[0].className = "canvasHidden";
+    document.getElementsByTagName('canvas')[0].classList.remove('canvasFade');
+    document.getElementsByTagName('canvas')[0].classList.add('canvasHidden');
 
     setTimeout(function () {
 
-        document.getElementsByTagName('canvas')[0].className = "canvasFade";
+        document.getElementsByTagName('canvas')[0].classList.remove('canvasHidden');
+        document.getElementsByTagName('canvas')[0].classList.add('canvasFade');
 
-    }, 400)
+    }, 300)
 
 }
 
