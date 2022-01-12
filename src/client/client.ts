@@ -37,6 +37,13 @@ let canvasSize = document.getElementById("canvasSize");
 let ua = navigator.userAgent || navigator.vendor;
 let isInstagram = (ua.indexOf('Instagram') > -1) ? true : false;
 
+window.addEventListener('wheel', e => {
+    e.preventDefault();
+}, { passive: false });
+
+window.addEventListener('gesturestart', e => e.preventDefault());
+window.addEventListener('gesturechange', e => e.preventDefault());
+window.addEventListener('gestureend', e => e.preventDefault());
 
 // ============================================================ SCRIPT CALLS  ==============================================================
 
