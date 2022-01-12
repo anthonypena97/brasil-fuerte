@@ -1,6 +1,6 @@
 # BRASIL FUERTE
 
-### 3D Object for Playlist Link Redirection
+### 3D Model Web Page Renderer Boilerplate, using Three.js
 
 ![MIT License badge](https://img.shields.io/badge/license-MIT_License-green)
 
