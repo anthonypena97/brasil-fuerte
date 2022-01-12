@@ -69,7 +69,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Version History
 
-- v1.2.1 is latest version
+- v1.2.2 is latest version
   - - See [commit change](https://github.com/anthonypena97/brasil-fuerte/commits/main) or See [release history](https://github.com/anthonypena97/braisl-fuerte/releases)
 
 ## Contributing
