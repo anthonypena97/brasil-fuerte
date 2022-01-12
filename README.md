@@ -6,7 +6,9 @@
 
 [![brasil-fuerte-demo](https://user-images.githubusercontent.com/79285555/148021888-5008bd57-3ae7-48d1-a85f-a83c19faec1e.gif)](https://anthonypena97.github.io/brasil-fuerte/)
 
-#### Sample Site: https://anthonypena97.github.io/brasil-fuerte/
+#### Sample Sites:
+https://totopena.gallery
+https://anthonypena97.github.io/brasil-fuerte/
 
 <p> ---------------------------------------- </p>
 
@@ -35,7 +37,7 @@ A simple site rendering a 3D Box which a user may click and be redirected to my 
 
 ## Usage
 
-To experience the deployed site, simply visit [Brasil Fuerte](https://anthonypena97.github.io/brasil-fuerte/)
+To experience the deployed site for the boilerplate, simply visit [Brasil Fuerte](https://anthonypena97.github.io/brasil-fuerte/)
 
 ## Installation
 
