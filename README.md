@@ -1,6 +1,6 @@
 # BRASIL FUERTE
 
-### Interactive 3D Model Web Page Renderer Boilerplate using Three.js
+### Interactive 3D Model Web Page Renderer using Three.js
 
 ![MIT License badge](https://img.shields.io/badge/license-MIT_License-green)
 
